@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+run() {
+    echo >&2 "+ $*"
+    "$@"
+}
+
+if [ $# -lt 1 ]; then
+    cat >&2 <<EOM
+usage: $(basename "$0") RFC_NUMBER...
+EOM
+    exit 1
+fi
+
+cd "$(dirname "$0")"
+
+for i in "$@"; do
+    run wget -N "https://tools.ietf.org/rfc/rfc${i}.txt"
+done
